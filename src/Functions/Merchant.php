@@ -1,8 +1,8 @@
 <?php
 
-namespace BeeDelivery\LaraiFood\Functions;
+namespace BeeDelivery\LaravelIfood\Functions;
 
-use BeeDelivery\LaraiFood\Connection;
+use BeeDelivery\LaravelIfood\Connection;
 
 class Merchant
 {

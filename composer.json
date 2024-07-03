@@ -3,7 +3,7 @@
     "description": "Integração rápida e fácil com o iFood, em PHP",
     "keywords": [
         "bee-delivery",
-        "laraifood",
+        "laravelifood",
         "laravel",
         "ifood",
         "php"
@@ -20,20 +20,20 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": ">=7.1.3"
+        "php": ">=8.1"
     },
     "autoload": {
         "psr-4": {
-            "BeeDelivery\\LaraiFood\\": "src/"
+            "BeeDelivery\\LaravelIfood\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "BeeDelivery\\LaraiFood\\Providers\\LaraiFoodServiceProvider"
+                "BeeDelivery\\LaravelIfood\\Providers\\LaravelIfoodServiceProvider"
             ],
             "aliases": {
-                "LaraiFood": "BeeDelivery\\LaraiFood\\Facades\\LaraiFood"
+                "LaravelIfood": "BeeDelivery\\LaravelIfood\\Facades\\LaravelIfood"
             }
         }
     }

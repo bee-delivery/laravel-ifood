@@ -1,10 +1,10 @@
 <?php
 
-namespace BeeDelivery\LaraiFood\Facades;
+namespace BeeDelivery\LaravelIfood\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class LaraiFood extends Facade
+class LaravelIfood extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -13,6 +13,6 @@ class LaraiFood extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'laraifood';
+        return 'laravelifood';
     }
 }

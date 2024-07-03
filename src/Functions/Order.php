@@ -1,6 +1,6 @@
 <?php
 
-namespace BeeDelivery\LaraiFood\Functions;
+namespace BeeDelivery\LaravelIfood\Functions;
 
 use Illuminate\Support\Facades\Http;
 

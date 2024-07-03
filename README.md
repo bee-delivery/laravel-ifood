@@ -8,14 +8,14 @@ Integre seu sistema rapidamente com o iFood através deste pacote.
 Instale com [composer](https://getcomposer.org/):
 
 ```bash
-composer require bee-delivery/laraifood
+composer require bee-delivery/LaravelIfood
 ```
 
 ## Authentication OAuth
 Issues a user code to link applications in Partner Portal and grant them permissions to access merchant resources
 
 ```php
-$response = LaraiFood::auth()->getUserCode();
+$response = LaravelIfood::auth()->getUserCode();
 ```
 > Example of response
 ```php
@@ -34,7 +34,7 @@ $response = LaraiFood::auth()->getUserCode();
 ### Requests new access token for accessing our API resources. By default, the token expires in 6 hours.
 
 ```php
-$response = LaraiFood::auth()->getToken([
+$response = LaravelIfood::auth()->getToken([
   'authorizationCode' => 'RTHJ-TBHB', //this code is generated when Partner grants permission to your application
   'authorizationCodeVerifier' => '9v3tzb6uovoexps42o22cqkqtqs7v040lj30zt10efhru80ayr1y533yge8mj9i0r479lshtjaq1lmjmlgxwzhfeh5fgxzl5s00' //this code is received in the method getUserCode
 ]);
@@ -62,7 +62,7 @@ Lists the summary of all merchants related to the client in the token.
 $accessToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJzdWIiOiI4OGUyMzJjMi02OWQ4LTQwMGMtYjI4ZS0yZWU4Yzc0ZjUzMzIiLCJhcHBfbmFtZSI6ImRmYjk1ZjBmLThmZWItNGRhMi1iYTVlLWI4ZDI3MTlmMzFkYyIsImF1ZCI6WyJjYXRhbG9nIiwiZmluYW5jaWFsIiwicmV2aWV3IiwibWVyY2hhbnQiLCJvcmRlciIsIm9hdXRoLXNlcnZlciJdLCJvd25lcl9uYW1lIjoiIiwic2NvcGUiOlsiY2F0YWxvZyIsInJldmlldyIsIm1lcmNoYW50Iiwib3JkZXIiLCJjb25jaWxpYXRvciJdLCJpc3MiOiJpRm9vZCIsInR5cGUiOiJjb21wYWN0IiwiZXhwIjoxNjI5MTc4NDkwLCJpYXQiOjE2MjkxNTY4OTAsImp0aSI6IjI5NGRlNTE0LWM3MTQtNDY4YS1hOWNlLWYyZjM2ZGFhZjhiMiIsIm1lcmNoYW50X3Njb3BlZCI6dHJ1ZSwiY2xpZW50X2lkIjoiZGZiOTVmMGYtOGZlYi00ZGEyLWJhNWUtYjhkMjcxOWYzMWRjIn0.Y1gu30zk7vDXAWtIGJR7DnFAwEFL63rUH9DddQp-au_1OVY0yPHC92bI4lRLc8nfLiUT2drx2KFB2X0M1DCRVMA9RX4_5GFUy1bRXJiBttAsM5-C3egZMRYG5cVpDYXs8NZORLIPZVMcACAJ_1DOHabBpIyabkimMxIj8pXUG0E';
 $merchantId = '75f3535e-af3e-4034-b748-908f587e45c4';
 
-$response = LaraiFood::merchant($accessToken)->getAllMerchants();
+$response = LaravelIfood::merchant($accessToken)->getAllMerchants();
 ```
 > Example of response
 ```php
@@ -92,7 +92,7 @@ Gets detailed information about the merchant, such as merchant basic info, addre
 $accessToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJzdWIiOiI4OGUyMzJjMi02OWQ4LTQwMGMtYjI4ZS0yZWU4Yzc0ZjUzMzIiLCJhcHBfbmFtZSI6ImRmYjk1ZjBmLThmZWItNGRhMi1iYTVlLWI4ZDI3MTlmMzFkYyIsImF1ZCI6WyJjYXRhbG9nIiwiZmluYW5jaWFsIiwicmV2aWV3IiwibWVyY2hhbnQiLCJvcmRlciIsIm9hdXRoLXNlcnZlciJdLCJvd25lcl9uYW1lIjoiIiwic2NvcGUiOlsiY2F0YWxvZyIsInJldmlldyIsIm1lcmNoYW50Iiwib3JkZXIiLCJjb25jaWxpYXRvciJdLCJpc3MiOiJpRm9vZCIsInR5cGUiOiJjb21wYWN0IiwiZXhwIjoxNjI5MTc4NDkwLCJpYXQiOjE2MjkxNTY4OTAsImp0aSI6IjI5NGRlNTE0LWM3MTQtNDY4YS1hOWNlLWYyZjM2ZGFhZjhiMiIsIm1lcmNoYW50X3Njb3BlZCI6dHJ1ZSwiY2xpZW50X2lkIjoiZGZiOTVmMGYtOGZlYi00ZGEyLWJhNWUtYjhkMjcxOWYzMWRjIn0.Y1gu30zk7vDXAWtIGJR7DnFAwEFL63rUH9DddQp-au_1OVY0yPHC92bI4lRLc8nfLiUT2drx2KFB2X0M1DCRVMA9RX4_5GFUy1bRXJiBttAsM5-C3egZMRYG5cVpDYXs8NZORLIPZVMcACAJ_1DOHabBpIyabkimMxIj8pXUG0E';
 $merchantId = '75f3535e-af3e-4034-b748-908f587e45c4';
 
-$response = LaraiFood::merchant($accessToken)->getMerchant($merchantId);
+$response = LaravelIfood::merchant($accessToken)->getMerchant($merchantId);
 ```
 > Example of response
 ```php
@@ -142,7 +142,7 @@ Each event received from this endpoint must be properly acknowledged, otherwise 
 ```php
 $accessToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJzdWIiOiI4OGUyMzJjMi02OWQ4LTQwMGMtYjI4ZS0yZWU4Yzc0ZjUzMzIiLCJhcHBfbmFtZSI6ImRmYjk1ZjBmLThmZWItNGRhMi1iYTVlLWI4ZDI3MTlmMzFkYyIsImF1ZCI6WyJjYXRhbG9nIiwiZmluYW5jaWFsIiwicmV2aWV3IiwibWVyY2hhbnQiLCJvcmRlciIsIm9hdXRoLXNlcnZlciJdLCJvd25lcl9uYW1lIjoiIiwic2NvcGUiOlsiY2F0YWxvZyIsInJldmlldyIsIm1lcmNoYW50Iiwib3JkZXIiLCJjb25jaWxpYXRvciJdLCJpc3MiOiJpRm9vZCIsInR5cGUiOiJjb21wYWN0IiwiZXhwIjoxNjI5MTc4NDkwLCJpYXQiOjE2MjkxNTY4OTAsImp0aSI6IjI5NGRlNTE0LWM3MTQtNDY4YS1hOWNlLWYyZjM2ZGFhZjhiMiIsIm1lcmNoYW50X3Njb3BlZCI6dHJ1ZSwiY2xpZW50X2lkIjoiZGZiOTVmMGYtOGZlYi00ZGEyLWJhNWUtYjhkMjcxOWYzMWRjIn0.Y1gu30zk7vDXAWtIGJR7DnFAwEFL63rUH9DddQp-au_1OVY0yPHC92bI4lRLc8nfLiUT2drx2KFB2X0M1DCRVMA9RX4_5GFUy1bRXJiBttAsM5-C3egZMRYG5cVpDYXs8NZORLIPZVMcACAJ_1DOHabBpIyabkimMxIj8pXUG0E';
 
-$response = LaraiFood::order($accessToken)->eventsPolling();
+$response = LaravelIfood::order($accessToken)->eventsPolling();
 ```
 > Example of response
 ```php
@@ -171,7 +171,7 @@ Full information on the order (items, payment, delivery information, etc.).
 ```php
 $accessToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJzdWIiOiI4OGUyMzJjMi02OWQ4LTQwMGMtYjI4ZS0yZWU4Yzc0ZjUzMzIiLCJhcHBfbmFtZSI6ImRmYjk1ZjBmLThmZWItNGRhMi1iYTVlLWI4ZDI3MTlmMzFkYyIsImF1ZCI6WyJjYXRhbG9nIiwiZmluYW5jaWFsIiwicmV2aWV3IiwibWVyY2hhbnQiLCJvcmRlciIsIm9hdXRoLXNlcnZlciJdLCJvd25lcl9uYW1lIjoiIiwic2NvcGUiOlsiY2F0YWxvZyIsInJldmlldyIsIm1lcmNoYW50Iiwib3JkZXIiLCJjb25jaWxpYXRvciJdLCJpc3MiOiJpRm9vZCIsInR5cGUiOiJjb21wYWN0IiwiZXhwIjoxNjI5MTc4NDkwLCJpYXQiOjE2MjkxNTY4OTAsImp0aSI6IjI5NGRlNTE0LWM3MTQtNDY4YS1hOWNlLWYyZjM2ZGFhZjhiMiIsIm1lcmNoYW50X3Njb3BlZCI6dHJ1ZSwiY2xpZW50X2lkIjoiZGZiOTVmMGYtOGZlYi00ZGEyLWJhNWUtYjhkMjcxOWYzMWRjIn0.Y1gu30zk7vDXAWtIGJR7DnFAwEFL63rUH9DddQp-au_1OVY0yPHC92bI4lRLc8nfLiUT2drx2KFB2X0M1DCRVMA9RX4_5GFUy1bRXJiBttAsM5-C3egZMRYG5cVpDYXs8NZORLIPZVMcACAJ_1DOHabBpIyabkimMxIj8pXUG0E';
 $orderId = '3fa85f64-5717-4562-b3fc-2c963f66afa6';
-$response = LaraiFood::order($accessToken)->details($orderId);
+$response = LaravelIfood::order($accessToken)->details($orderId);
 ```
 > Example of response
 ```php

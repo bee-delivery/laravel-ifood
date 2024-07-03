@@ -1,11 +1,11 @@
 <?php
 
-namespace BeeDelivery\LaraiFood\Providers;
+namespace BeeDelivery\LaravelIfood\Providers;
 
-use BeeDelivery\LaraiFood\LaraiFood;
+use BeeDelivery\LaravelIfood\LaravelIfood;
 use Illuminate\Support\ServiceProvider;
 
-class LaraiFoodServiceProvider extends ServiceProvider
+class LaravelIfoodServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -15,7 +15,7 @@ class LaraiFoodServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../config/laraifood.php' => config_path('laraifood.php'),
+            __DIR__.'/../config/laravelifood.php' => config_path('laravelifood.php'),
         ]);
     }
 
@@ -26,11 +26,11 @@ class LaraiFoodServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../../config/laraifood.php', 'laraifood');
+        $this->mergeConfigFrom(__DIR__ . '/../../config/laravelifood.php', 'laravelifood');
 
         // Register the service the package provides.
-        $this->app->singleton('laraifood', function ($app) {
-            return new LaraiFood;
+        $this->app->singleton('laravelifood', function ($app) {
+            return new LaravelIfood;
         });
     }
 

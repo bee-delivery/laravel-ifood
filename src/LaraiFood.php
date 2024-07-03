@@ -1,12 +1,12 @@
 <?php
 
-namespace BeeDelivery\LaraiFood;
+namespace BeeDelivery\LaravelIfood;
 
-use BeeDelivery\LaraiFood\Functions\Auth;
-use BeeDelivery\LaraiFood\Functions\Merchant;
-use BeeDelivery\LaraiFood\Functions\Order;
+use BeeDelivery\LaravelIfood\Functions\Auth;
+use BeeDelivery\LaravelIfood\Functions\Merchant;
+use BeeDelivery\LaravelIfood\Functions\Order;
 
-class LaraiFood
+class LaravelIfood
 {
     public static function auth() {
         return new Auth();
