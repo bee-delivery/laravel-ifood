@@ -2,21 +2,18 @@
 
 namespace BeeDelivery\LaraiFood\Functions;
 
-use BeeDelivery\LaraiFood\Connection;
-use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 
 class Order
 {
     protected $accessToken;
     protected $client;
+    protected $base_uri;
 
     public function __construct($accessToken)
     {
         $this->accessToken = $accessToken;
-
-        $this->client = new Client([
-            'base_uri' => config('laraifood.base_uri'),
-        ]);
+        $this->base_uri = config('laraifood.base_uri');
     }
 
     /**
@@ -29,26 +26,23 @@ class Order
     public function eventsPolling($groups = null, $types = null)
     {
         try {
-            $response = $this->client->request('GET', "order/v1.0/events:polling", [
-                'allow_redirects' => false,
-                'headers' => [
+            $response = Http::withOptions(['allow_redirects' => false])
+                ->withHeaders([
                     'Authorization' => 'Bearer ' . $this->accessToken,
-                ],
-                'query' => [
+                ])
+                ->get("{$this->base_uri}/order/v1.0/events:polling", [
                     'groups' => $groups,
                     'types' => $types,
-                ]
-            ]);
-
+                ]);
+        
             return [
-                'code' => $response->getStatusCode(),
-                'response' => json_decode($response->getBody(), true)
+                'code' => $response->status(),
+                'response' => $response->json(),
             ];
-
-        } catch (\Exception $e) {
+        } catch (\Illuminate\Http\Client\RequestException $e) {
             return [
-                'code' => $e->getCode(),
-                'response' => $e->getMessage()
+                'code' => $e->response ? $e->response->status() : 500,
+                'response' => $e->getMessage(),
             ];
         }
     }
@@ -62,22 +56,20 @@ class Order
     public function details($orderId)
     {
         try {
-            $response = $this->client->request('GET', "order/v1.0/orders/$orderId", [
-                'allow_redirects' => false,
-                'headers' => [
+            $response = Http::withOptions(['allow_redirects' => false])
+                ->withHeaders([
                     'Authorization' => 'Bearer ' . $this->accessToken,
-                ]
-            ]);
-
+                ])
+                ->get("{$this->base_uri}/order/v1.0/orders/{$orderId}");
+        
             return [
-                'code' => $response->getStatusCode(),
-                'response' => json_decode($response->getBody(), true)
+                'code' => $response->status(),
+                'response' => $response->json(),
             ];
-
-        } catch (\Exception $e) {
+        } catch (\Illuminate\Http\Client\RequestException $e) {
             return [
-                'code' => $e->getCode(),
-                'response' => $e->getMessage()
+                'code' => $e->response ? $e->response->status() : 500,
+                'response' => $e->getMessage(),
             ];
         }
     }
@@ -91,46 +83,43 @@ class Order
     public function acknowledge($events)
     {
         try {
-            $response = $this->client->request('POST', "order/v1.0/events/acknowledgment", [
-                'allow_redirects' => false,
-                'headers' => [
+            $response = Http::withOptions(['allow_redirects' => false])
+                ->withHeaders([
                     'Authorization' => 'Bearer ' . $this->accessToken,
-                    'content-type' => 'application/json'
-                ],
-                'body' => json_encode($events),
-            ]);
-
+                    'Content-Type' => 'application/json',
+                ])
+                ->post("{$this->base_uri}/order/v1.0/events/acknowledgment", [
+                    'body' => json_encode($events),
+                ]);
+        
             return [
-                'code' => $response->getStatusCode(),
-                'response' => json_decode($response->getBody(), true)
+                'code' => $response->status(),
+                'response' => $response->json(),
             ];
-
-        } catch (\Exception $e) {
+        } catch (\Illuminate\Http\Client\RequestException $e) {
             return [
-                'code' => $e->getCode(),
-                'response' => $e->getMessage()
+                'code' => $e->response ? $e->response->status() : 500,
+                'response' => $e->getMessage(),
             ];
         }
     }
 
     public function dispatch($orderId){
         try {
-            $response = $this->client->request('POST', "order/v1.0/orders/$orderId/dispatch", [
-                'allow_redirects' => false,
-                'headers' => [
+            $response = Http::withOptions(['allow_redirects' => false])
+                ->withHeaders([
                     'Authorization' => 'Bearer ' . $this->accessToken,
-                ]
-            ]);
-
+                ])
+                ->post("{$this->base_uri}/order/v1.0/orders/{$orderId}/dispatch");
+        
             return [
-                'code' => $response->getStatusCode(),
-                'response' => json_decode($response->getBody(), true)
+                'code' => $response->status(),
+                'response' => $response->json(),
             ];
-
-        } catch (\Exception $e) {
+        } catch (\Illuminate\Http\Client\RequestException $e) {
             return [
-                'code' => $e->getCode(),
-                'response' => $e->getMessage()
+                'code' => $e->response ? $e->response->status() : 500,
+                'response' => $e->getMessage(),
             ];
         }
     }

@@ -17,55 +17,42 @@ class Merchant
 
     public function getAllMerchants()
     {
-        $client = new \GuzzleHttp\Client([
-            'base_uri' => $this->base_uri,
-        ]);
-
         try {
-            $response = $client->request('GET', "merchant/v1.0/merchants", [
-                'allow_redirects' => false,
-                'headers' => [
+            $response = Http::withOptions(['allow_redirects' => false])
+                ->withHeaders([
                     'Authorization' => 'Bearer ' . $this->accessToken,
-                ],
-            ]);
-
+                ])
+                ->get("{$this->base_uri}/merchant/v1.0/merchants");
+        
             return [
-                'code' => $response->getStatusCode(),
-                'response' => json_decode($response->getBody(), true)
+                'code' => $response->status(),
+                'response' => $response->json(),
             ];
-
-        } catch (\Exception $e) {
+        } catch (\Illuminate\Http\Client\RequestException $e) {
             return [
-                'code' => $e->getCode(),
-                'response' => $e->getMessage()
+                'code' => $e->response ? $e->response->status() : 500,
+                'response' => $e->getMessage(),
             ];
         }
-
     }
 
     public function getMerchant($merchantId)
     {
-        $client = new \GuzzleHttp\Client([
-            'base_uri' => $this->base_uri,
-        ]);
-
-        try{
-            $response = $client->request('GET', "merchant/v1.0/merchants/$merchantId", [
-                'allow_redirects' => false,
-                'headers' => [
+        try {
+            $response = Http::withOptions(['allow_redirects' => false])
+                ->withHeaders([
                     'Authorization' => 'Bearer ' . $this->accessToken,
-                ],
-            ]);
-
+                ])
+                ->get("{$this->base_uri}/merchant/v1.0/merchants/{$merchantId}");
+        
             return [
-                'code' => $response->getStatusCode(),
-                'response' => json_decode($response->getBody(), true)
+                'code' => $response->status(),
+                'response' => $response->json(),
             ];
-
-        } catch (\Exception $e) {
+        } catch (\Illuminate\Http\Client\RequestException $e) {
             return [
-                'code' => $e->getCode(),
-                'response' => $e->getMessage()
+                'code' => $e->response ? $e->response->status() : 500,
+                'response' => $e->getMessage(),
             ];
         }
     }

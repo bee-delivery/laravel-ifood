@@ -1,6 +1,7 @@
 <?php
 
 namespace BeeDelivery\LaraiFood\Functions;
+use Illuminate\Support\Facades\Http;
 
 class Auth
 {
@@ -26,30 +27,24 @@ class Auth
     public function getUserCode()
     {
 
-        $client = new \GuzzleHttp\Client([
-            'base_uri' => $this->base_uri,
-        ]);
-
         try {
-            $response = $client->request('POST', "authentication/v1.0/oauth/userCode", [
-                'allow_redirects' => false,
-                'header' => [
+            $response = Http::withOptions(['allow_redirects' => false])
+                ->asForm()
+                ->withHeaders([
                     'Content-Type' => 'application/x-www-form-urlencoded',
-                ],
-                'form_params' => [
-                    'clientId' => $this->client_id
-                ],
-            ]);
-
+                ])
+                ->post("{$this->base_uri}/authentication/v1.0/oauth/userCode", [
+                    'clientId' => $this->client_id,
+                ]);
+                
             return [
-                'code' => $response->getStatusCode(),
-                'response' => json_decode($response->getBody(), true)
+                'code' => $response->status(),
+                'response' => $response->json(),
             ];
-
-        } catch (\Exception $e) {
+        } catch (\Illuminate\Http\Client\RequestException $e) {
             return [
-                'code' => $e->getCode(),
-                'response' => $e->getMessage()
+                'code' => $e->response ? $e->response->status() : 500,
+                'response' => $e->getMessage(),
             ];
         }
 
@@ -57,37 +52,31 @@ class Auth
 
     public function getToken($data = array())
     {
-        $client = new \GuzzleHttp\Client([
-            'base_uri' => $this->base_uri,
-        ]);
-
         $formParams = [
             'grantType' => isset($data['refreshToken']) ? 'refresh_token' : $this->grant_type,
             'clientId' => $this->client_id,
             'clientSecret' => $this->client_secret,
-            'authorizationCode' => isset($data['authorizationCode']) ? $data['authorizationCode'] : null,
-            'authorizationCodeVerifier' => isset($data['authorizationCodeVerifier']) ? $data['authorizationCodeVerifier'] : null,
-            'refreshToken' => isset($data['refreshToken']) ? $data['refreshToken'] : null
+            'authorizationCode' => $data['authorizationCode'] ?? null,
+            'authorizationCodeVerifier' => $data['authorizationCodeVerifier'] ?? null,
+            'refreshToken' => $data['refreshToken'] ?? null,
         ];
 
         try {
-            $response = $client->request('POST', "authentication/v1.0/oauth/token", [
-                'allow_redirects' => false,
-                'header' => [
+            $response = Http::withOptions(['allow_redirects' => false])
+                ->asForm()
+                ->withHeaders([
                     'Content-Type' => 'application/x-www-form-urlencoded',
-                ],
-                'form_params' => $formParams
-            ]);
+                ])
+                ->post("{$this->base_uri}/authentication/v1.0/oauth/token", $formParams);
 
             return [
-                'code' => $response->getStatusCode(),
-                'response' => json_decode($response->getBody(), true)
+                'code' => $response->status(),
+                'response' => $response->json(),
             ];
-
-        } catch (\Exception $e) {
+        } catch (\Illuminate\Http\Client\RequestException $e) {
             return [
-                'code' => $e->getCode(),
-                'response' => $e->getMessage()
+                'code' => $e->response ? $e->response->status() : 500,
+                'response' => $e->getMessage(),
             ];
         }
     }
