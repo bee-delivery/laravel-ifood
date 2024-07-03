@@ -2,7 +2,7 @@
 
 namespace BeeDelivery\LaravelIfood\Functions;
 
-use BeeDelivery\LaravelIfood\Connection;
+use Illuminate\Support\Facades\Http;
 
 class Merchant
 {
