@@ -3,6 +3,7 @@
 namespace BeeDelivery\LaravelIfood;
 
 use BeeDelivery\LaravelIfood\Functions\Auth;
+use BeeDelivery\LaravelIfood\Functions\LogisticOrder;
 use BeeDelivery\LaravelIfood\Functions\Merchant;
 use BeeDelivery\LaravelIfood\Functions\Order;
 
@@ -20,5 +21,10 @@ class LaravelIfood
     public static function order($accessToken)
     {
         return new Order($accessToken);
+    }
+
+    public static function logisticOrder($accessToken)
+    {
+        return new LogisticOrder($accessToken);
     }
 }

@@ -44,6 +44,11 @@ class Order
                 'code' => $e->response ? $e->response->status() : 500,
                 'response' => $e->getMessage(),
             ];
+        } catch (\Exception $e) {
+            return [
+                'code' => 500,
+                'response' => $e->getMessage(),
+            ];
         }
     }
 
@@ -69,6 +74,11 @@ class Order
         } catch (\Illuminate\Http\Client\RequestException $e) {
             return [
                 'code' => $e->response ? $e->response->status() : 500,
+                'response' => $e->getMessage(),
+            ];
+        } catch (\Exception $e) {
+            return [
+                'code' => 500,
                 'response' => $e->getMessage(),
             ];
         }
@@ -101,6 +111,11 @@ class Order
                 'code' => $e->response ? $e->response->status() : 500,
                 'response' => $e->getMessage(),
             ];
+        } catch (\Exception $e) {
+            return [
+                'code' => 500,
+                'response' => $e->getMessage(),
+            ];
         }
     }
 
@@ -119,6 +134,11 @@ class Order
         } catch (\Illuminate\Http\Client\RequestException $e) {
             return [
                 'code' => $e->response ? $e->response->status() : 500,
+                'response' => $e->getMessage(),
+            ];
+        } catch (\Exception $e) {
+            return [
+                'code' => 500,
                 'response' => $e->getMessage(),
             ];
         }
