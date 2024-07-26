@@ -3,66 +3,39 @@
 namespace BeeDelivery\LaravelIfood\Functions;
 
 use Illuminate\Support\Facades\Http;
-
+use Illuminate\Http\Client\RequestException;
 class LogisticOrder
 {
     protected $accessToken;
     protected $client;
-    protected $base_uri;
+    protected $baseUri;
 
     public function __construct($accessToken)
     {
         $this->accessToken = $accessToken;
-        $this->base_uri = config('laraifood.base_uri');
+        $this->baseUri = config('laraifood.base_uri');
     }
 
     /**
      * Full information on the order (items, payment, delivery information, etc.).
      *
-     * @param uuid $orderId
+     * @param string $orderId
      * @return array
      */
-    public function getDetails($orderId)
+    public function getDetails(string $orderId)
     {
         try {
             $response = Http::withOptions(['allow_redirects' => false])
-                ->withHeaders([
-                    'Authorization' => 'Bearer ' . $this->accessToken,
-                ])
-                ->get("{$this->base_uri}/logistics/v1.0/orders/{$orderId}");
+                ->withToken($this->accessToken)
+                ->get("{$this->baseUri}/logistics/v1.0/orders/{$orderId}");
         
             return [
                 'code' => $response->status(),
                 'response' => $response->json(),
             ];
-        } catch (\Illuminate\Http\Client\RequestException $e) {
+        } catch (RequestException $exception) {
             return [
-                'code' => $e->response ? $e->response->status() : 500,
-                'response' => $e->getMessage(),
-            ];
-        }
-    }
-
-    /**
-     * Assign a driver to an order.
-     *
-     * @param uuid $orderId
-     * @param array $data
-     * @return array
-     */
-    public function assignDriver($orderId, $data){
-        try {
-            $response = Http::withOptions(['allow_redirects' => false])
-                ->withHeaders([''=> 'Bearer ' . $this->accessToken])
-                ->post("{$this->base_uri}/logistics/v1.0/orders/{$orderId}/assignDriver", $data);
-
-            return [
-                'code' => $response->status(),
-                'response' => $response->json(),
-            ];
-            } catch (\Illuminate\Http\Client\RequestException $e) {
-            return [
-                'code' => $e->response ? $e->response->status() : 500,
+                'code' => $exception->response ? $exception->response->status() : 500,
                 'response' => $e->getMessage(),
             ];
         } catch (\Exception $e) {
@@ -74,24 +47,54 @@ class LogisticOrder
     }
 
     /**
-     * Driver is going to the origin of the order.
+     * Assign a driver to an order.
      *
-     * @param uuid $orderId
+     * @param string $orderId
+     * @param array $data
      * @return array
      */
-    public function goingToOrigin($orderId){
+    public function assignDriver(string $orderId, array $data){
         try {
             $response = Http::withOptions(['allow_redirects' => false])
-                ->withHeaders([''=> 'Bearer ' . $this->accessToken])
-                ->post("{$this->base_uri}/logistics/v1.0/orders/{$orderId}/goingToOrigin");
+                ->withToken($this->accessToken)
+                ->post("{$this->baseUri}/logistics/v1.0/orders/{$orderId}/assignDriver", $data);
 
             return [
                 'code' => $response->status(),
                 'response' => $response->json(),
             ];
-        } catch (\Illuminate\Http\Client\RequestException $e) {
+            } catch (RequestException $exception) {
+                return [
+                    'code' => $exception->response ? $exception->response->status() : 500,
+                    'response' => $e->getMessage(),
+                ];
+            } catch (\Exception $e) {
+                return [
+                    'code' => 500,
+                    'response' => $e->getMessage(),
+                ];
+            }
+    }
+
+    /**
+     * Driver is going to the origin of the order.
+     *
+     * @param string $orderId
+     * @return array
+     */
+    public function goingToOrigin(string $orderId){
+        try {
+            $response = Http::withOptions(['allow_redirects' => false])
+                ->withToken($this->accessToken)
+                ->post("{$this->baseUri}/logistics/v1.0/orders/{$orderId}/goingToOrigin");
+
             return [
-                'code' => $e->response ? $e->response->status() : 500,
+                'code' => $response->status(),
+                'response' => $response->json(),
+            ];
+        } catch (RequestException $exception) {
+            return [
+                'code' => $exception->response ? $exception->response->status() : 500,
                 'response' => $e->getMessage(),
             ];
         } catch (\Exception $e) {
@@ -106,22 +109,22 @@ class LogisticOrder
     /**
      * Driver arrived at the origin of the order.
      *
-     * @param uuid $orderId
+     * @param string $orderId
      * @return array
      */
-    public function arrivedAtOrigin($orderId){
+    public function arrivedAtOrigin(string $orderId){
         try {
             $response = Http::withOptions(['allow_redirects' => false])
-                ->withHeaders([''=> 'Bearer ' . $this->accessToken])
-                ->post("{$this->base_uri}/logistics/v1.0/orders/{$orderId}/arrivedAtOrigin");
+                ->withToken($this->accessToken)
+                ->post("{$this->baseUri}/logistics/v1.0/orders/{$orderId}/arrivedAtOrigin");
 
             return [
                 'code' => $response->status(),
                 'response' => $response->json(),
             ];
-        } catch (\Illuminate\Http\Client\RequestException $e) {
+        } catch (RequestException $exception) {
             return [
-                'code' => $e->response ? $e->response->status() : 500,
+                'code' => $exception->response ? $exception->response->status() : 500,
                 'response' => $e->getMessage(),
             ];
         } catch (\Exception $e) {
@@ -135,22 +138,22 @@ class LogisticOrder
     //dispatch
     /**
      * Dispatch the order.
-     * @param mixed $orderId
+     * @param string $orderId
      * @return array
      */
-    public function dispatch($orderId){
+    public function dispatch(string $orderId){
         try {
             $response = Http::withOptions(['allow_redirects' => false])
-                ->withHeaders([''=> 'Bearer ' . $this->accessToken])
-                ->post("{$this->base_uri}/logistics/v1.0/orders/{$orderId}/dispatch");
+                ->withToken($this->accessToken)
+                ->post("{$this->baseUri}/logistics/v1.0/orders/{$orderId}/dispatch");
 
             return [
                 'code' => $response->status(),
                 'response' => $response->json(),
             ];
-        } catch (\Illuminate\Http\Client\RequestException $e) {
+        } catch (RequestException $exception) {
             return [
-                'code' => $e->response ? $e->response->status() : 500,
+                'code' => $exception->response ? $exception->response->status() : 500,
                 'response' => $e->getMessage(),
             ];
         } catch (\Exception $e) {
@@ -164,22 +167,22 @@ class LogisticOrder
     /**
      * Driver arrived at the destination of the order.
      *
-     * @param uuid $orderId
+     * @param string $orderId
      * @return array
      */
-    public function arrivedAtDestination($orderId){
+    public function arrivedAtDestination(string $orderId){
         try {
             $response = Http::withOptions(['allow_redirects' => false])
-                ->withHeaders([''=> 'Bearer ' . $this->accessToken])
-                ->post("{$this->base_uri}/logistics/v1.0/orders/{$orderId}/arrivedAtDestination");
+                ->withToken($this->accessToken)
+                ->post("{$this->baseUri}/logistics/v1.0/orders/{$orderId}/arrivedAtDestination");
 
             return [
                 'code' => $response->status(),
                 'response' => $response->json(),
             ];
-        } catch (\Illuminate\Http\Client\RequestException $e) {
+        } catch (RequestException $exception) {
             return [
-                'code' => $e->response ? $e->response->status() : 500,
+                'code' => $exception->response ? $exception->response->status() : 500,
                 'response' => $e->getMessage(),
             ];
         } catch (\Exception $e) {
@@ -193,23 +196,23 @@ class LogisticOrder
     /**
      * Verify the delivery code of the order.
      *
-     * @param uuid $orderId
+     * @param string $orderId
      * @param array $data
      * @return array
      */
-    public function verifyDeliveryCode($orderId, $data){
+    public function verifyDeliveryCode(string $orderId, array $data){
         try {
             $response = Http::withOptions(['allow_redirects' => false])
-                ->withHeaders([''=> 'Bearer ' . $this->accessToken])
-                ->post("{$this->base_uri}/logistics/v1.0/orders/{$orderId}/verifyDeliveryCode", $data);
+                ->withToken($this->accessToken)
+                ->post("{$this->baseUri}/logistics/v1.0/orders/{$orderId}/verifyDeliveryCode", $data);
 
             return [
                 'code' => $response->status(),
                 'response' => $response->json(),
             ];
-        } catch (\Illuminate\Http\Client\RequestException $e) {
+        } catch (RequestException $exception) {
             return [
-                'code' => $e->response ? $e->response->status() : 500,
+                'code' => $exception->response ? $exception->response->status() : 500,
                 'response' => $e->getMessage(),
             ];
         } catch (\Exception $e) {

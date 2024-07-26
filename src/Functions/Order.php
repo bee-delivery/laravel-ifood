@@ -3,6 +3,7 @@
 namespace BeeDelivery\LaravelIfood\Functions;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\RequestException;
 
 class Order
 {
@@ -27,9 +28,7 @@ class Order
     {
         try {
             $response = Http::withOptions(['allow_redirects' => false])
-                ->withHeaders([
-                    'Authorization' => 'Bearer ' . $this->accessToken,
-                ])
+                ->withToken($this->accessToken)
                 ->get("{$this->base_uri}/order/v1.0/events:polling", [
                     'groups' => $groups,
                     'types' => $types,
@@ -39,15 +38,15 @@ class Order
                 'code' => $response->status(),
                 'response' => $response->json(),
             ];
-        } catch (\Illuminate\Http\Client\RequestException $e) {
+        } catch (RequestException $exception) {
             return [
-                'code' => $e->response ? $e->response->status() : 500,
-                'response' => $e->getMessage(),
+                'code' => $exception->response ? $exception->response->status() : 500,
+                'response' => $exception->getMessage(),
             ];
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             return [
                 'code' => 500,
-                'response' => $e->getMessage(),
+                'response' => $exception->getMessage(),
             ];
         }
     }
@@ -62,24 +61,22 @@ class Order
     {
         try {
             $response = Http::withOptions(['allow_redirects' => false])
-                ->withHeaders([
-                    'Authorization' => 'Bearer ' . $this->accessToken,
-                ])
+                ->withToken($this->accessToken)
                 ->get("{$this->base_uri}/order/v1.0/orders/{$orderId}");
         
             return [
                 'code' => $response->status(),
                 'response' => $response->json(),
             ];
-        } catch (\Illuminate\Http\Client\RequestException $e) {
+        } catch (RequestException $exception) {
             return [
-                'code' => $e->response ? $e->response->status() : 500,
-                'response' => $e->getMessage(),
+                'code' => $exception->response ? $exception->response->status() : 500,
+                'response' => $exception->getMessage(),
             ];
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             return [
                 'code' => 500,
-                'response' => $e->getMessage(),
+                'response' => $exception->getMessage(),
             ];
         }
     }
@@ -94,10 +91,7 @@ class Order
     {
         try {
             $response = Http::withOptions(['allow_redirects' => false])
-                ->withHeaders([
-                    'Authorization' => 'Bearer ' . $this->accessToken,
-                    'Content-Type' => 'application/json',
-                ])
+                ->withToken($this->accessToken)
                 ->post("{$this->base_uri}/order/v1.0/events/acknowledgment", [
                     'body' => json_encode($events),
                 ]);
@@ -106,15 +100,15 @@ class Order
                 'code' => $response->status(),
                 'response' => $response->json(),
             ];
-        } catch (\Illuminate\Http\Client\RequestException $e) {
+        } catch (RequestException $exception) {
             return [
-                'code' => $e->response ? $e->response->status() : 500,
-                'response' => $e->getMessage(),
+                'code' => $exception->response ? $exception->response->status() : 500,
+                'response' => $exception->getMessage(),
             ];
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             return [
                 'code' => 500,
-                'response' => $e->getMessage(),
+                'response' => $exception->getMessage(),
             ];
         }
     }
@@ -122,24 +116,22 @@ class Order
     public function dispatch($orderId){
         try {
             $response = Http::withOptions(['allow_redirects' => false])
-                ->withHeaders([
-                    'Authorization' => 'Bearer ' . $this->accessToken,
-                ])
+                ->withToken($this->accessToken)
                 ->post("{$this->base_uri}/order/v1.0/orders/{$orderId}/dispatch");
         
             return [
                 'code' => $response->status(),
                 'response' => $response->json(),
             ];
-        } catch (\Illuminate\Http\Client\RequestException $e) {
+        } catch (RequestException $exception) {
             return [
-                'code' => $e->response ? $e->response->status() : 500,
-                'response' => $e->getMessage(),
+                'code' => $exception->response ? $exception->response->status() : 500,
+                'response' => $exception->getMessage(),
             ];
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             return [
                 'code' => 500,
-                'response' => $e->getMessage(),
+                'response' => $exception->getMessage(),
             ];
         }
     }
