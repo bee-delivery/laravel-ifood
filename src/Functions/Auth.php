@@ -2,6 +2,7 @@
 
 namespace BeeDelivery\LaravelIfood\Functions;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\RequestException;
 
 class Auth
 {
@@ -41,10 +42,15 @@ class Auth
                 'code' => $response->status(),
                 'response' => $response->json(),
             ];
-        } catch (\Illuminate\Http\Client\RequestException $e) {
+        } catch (RequestException $exception) {
             return [
-                'code' => $e->response ? $e->response->status() : 500,
-                'response' => $e->getMessage(),
+                'code' => $exception->response ? $exception->response->status() : 500,
+                'response' => $exception->getMessage(),
+            ];
+        } catch (\Exception $exception) {
+            return [
+                'code' => 500,
+                'response' => $exception->getMessage(),
             ];
         }
 
@@ -73,10 +79,15 @@ class Auth
                 'code' => $response->status(),
                 'response' => $response->json(),
             ];
-        } catch (\Illuminate\Http\Client\RequestException $e) {
+        } catch (RequestException $exception) {
             return [
-                'code' => $e->response ? $e->response->status() : 500,
-                'response' => $e->getMessage(),
+                'code' => $exception->response ? $exception->response->status() : 500,
+                'response' => $exception->getMessage(),
+            ];
+        } catch (\Exception $exception) {
+            return [
+                'code' => 500,
+                'response' => $exception->getMessage(),
             ];
         }
     }
