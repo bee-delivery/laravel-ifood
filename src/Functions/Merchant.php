@@ -3,6 +3,7 @@
 namespace BeeDelivery\LaravelIfood\Functions;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\RequestException;
 
 class Merchant
 {
@@ -19,19 +20,22 @@ class Merchant
     {
         try {
             $response = Http::withOptions(['allow_redirects' => false])
-                ->withHeaders([
-                    'Authorization' => 'Bearer ' . $this->accessToken,
-                ])
+                ->withToken($this->accessToken)
                 ->get("{$this->base_uri}/merchant/v1.0/merchants");
         
             return [
                 'code' => $response->status(),
                 'response' => $response->json(),
             ];
-        } catch (\Illuminate\Http\Client\RequestException $e) {
+        } catch (RequestException $exception) {
             return [
-                'code' => $e->response ? $e->response->status() : 500,
-                'response' => $e->getMessage(),
+                'code' => $exception->response ? $exception->response->status() : 500,
+                'response' => $exception->getMessage(),
+            ];
+        } catch (\Exception $exception) {
+            return [
+                'code' => 500,
+                'response' => $exception->getMessage(),
             ];
         }
     }
@@ -40,19 +44,22 @@ class Merchant
     {
         try {
             $response = Http::withOptions(['allow_redirects' => false])
-                ->withHeaders([
-                    'Authorization' => 'Bearer ' . $this->accessToken,
-                ])
+                ->withToken($this->accessToken)
                 ->get("{$this->base_uri}/merchant/v1.0/merchants/{$merchantId}");
         
             return [
                 'code' => $response->status(),
                 'response' => $response->json(),
             ];
-        } catch (\Illuminate\Http\Client\RequestException $e) {
+        } catch (RequestException $exception) {
             return [
-                'code' => $e->response ? $e->response->status() : 500,
-                'response' => $e->getMessage(),
+                'code' => $exception->response ? $exception->response->status() : 500,
+                'response' => $exception->getMessage(),
+            ];
+        } catch (\Exception $exception) {
+            return [
+                'code' => 500,
+                'response' => $exception->getMessage(),
             ];
         }
     }
