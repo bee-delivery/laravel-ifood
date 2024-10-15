@@ -31,9 +31,10 @@ class Order
 
             $response = Http::withOptions(['allow_redirects' => false])
                 ->withToken($this->accessToken)
-                ->get("{$this->base_uri}/order/v1.0/events:polling?excludeHeartbeat=true", [
+                ->get("{$this->base_uri}/order/v1.0/events:polling", [
                     'groups' => $groups,
                     'types' => $types,
+                    'excludeHeartbeat' => true,
                 ]);
         
             return [
