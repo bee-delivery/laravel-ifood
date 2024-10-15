@@ -27,9 +27,11 @@ class Order
     public function eventsPolling($groups = null, $types = null)
     {
         try {
+            //add params excludeHeartbeat=true to exclude heartbeat events
+
             $response = Http::withOptions(['allow_redirects' => false])
                 ->withToken($this->accessToken)
-                ->get("{$this->base_uri}/order/v1.0/events:polling", [
+                ->get("{$this->base_uri}/order/v1.0/events:polling?excludeHeartbeat=true", [
                     'groups' => $groups,
                     'types' => $types,
                 ]);
@@ -92,7 +94,7 @@ class Order
         try {
             $response = Http::withOptions(['allow_redirects' => false])
                 ->withToken($this->accessToken)
-                ->post("{$this->base_uri}/order/v1.0/events/acknowledgment", [
+                ->post("{$this->base_uri}/events/v1.0/events/acknowledgment", [
                     'body' => json_encode($events),
                 ]);
         
