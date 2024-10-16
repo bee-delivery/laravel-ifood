@@ -95,9 +95,7 @@ class Order
         try {
             $response = Http::withOptions(['allow_redirects' => false])
                 ->withToken($this->accessToken)
-                ->post("{$this->base_uri}/events/v1.0/events/acknowledgment", [
-                    'body' => json_encode($events),
-                ]);
+                ->post("{$this->base_uri}/events/v1.0/events/acknowledgment", $events);
         
             return [
                 'code' => $response->status(),
