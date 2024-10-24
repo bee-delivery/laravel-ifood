@@ -17,6 +17,43 @@ class LogisticOrder
     }
 
     /**
+     * State changes and other kinds of notifications related to orders on the platform.
+     *
+     * @param string $groups
+     * @param string $types
+     * @return array
+     */
+    public function eventsPolling($groups = null, $types = null)
+    {
+        try {
+            //add params excludeHeartbeat=true to exclude heartbeat events
+
+            $response = Http::withOptions(['allow_redirects' => false])
+                ->withToken($this->accessToken)
+                ->get("{$this->base_uri}/events/v1.0/events:polling", [
+                    'groups' => $groups,
+                    'types' => $types,
+                    'excludeHeartbeat' => true,
+                ]);
+        
+            return [
+                'code' => $response->status(),
+                'response' => $response->json(),
+            ];
+        } catch (RequestException $exception) {
+            return [
+                'code' => $exception->response ? $exception->response->status() : 500,
+                'response' => $exception->getMessage(),
+            ];
+        } catch (\Exception $exception) {
+            return [
+                'code' => 500,
+                'response' => $exception->getMessage(),
+            ];
+        }
+    }
+
+    /**
      * Full information on the order (items, payment, delivery information, etc.).
      *
      * @param string $orderId
