@@ -30,7 +30,7 @@ class LogisticOrder
 
             $response = Http::withOptions(['allow_redirects' => false])
                 ->withToken($this->accessToken)
-                ->get("{$this->base_uri}/events/v1.0/events:polling", [
+                ->get("{$this->baseUri}/events/v1.0/events:polling", [
                     'groups' => $groups,
                     'types' => $types,
                     'excludeHeartbeat' => true,
