@@ -31,9 +31,6 @@ class Auth
         try {
             $response = Http::withOptions(['allow_redirects' => false])
                 ->asForm()
-                ->withHeaders([
-                    'Content-Type' => 'application/x-www-form-urlencoded',
-                ])
                 ->post("{$this->base_uri}/authentication/v1.0/oauth/userCode", [
                     'clientId' => $this->client_id,
                 ]);
