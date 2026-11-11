@@ -182,7 +182,9 @@ class LogisticOrder
         try {
             $response = Http::withOptions(['allow_redirects' => false])
                 ->withToken($this->accessToken)
-                ->post("{$this->baseUri}/logistics/v1.0/orders/{$orderId}/dispatch");
+                // Sem corpo: post() sem dados envia "[]" e o iFood recusa o dispatch com
+                // 400 "Failed to read HTTP message"; sem corpo ele responde 202.
+                ->send('POST', "{$this->baseUri}/logistics/v1.0/orders/{$orderId}/dispatch");
 
             return [
                 'code' => $response->status(),
